@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style type="text/css">
+    .box {
+	  height: 315px;
+	  width: 560px;
+	  background-color: red;
+	  position: relative;
+	  padding: 10px;
+	  /*top: 5px; left: 5px;*/
+	  cursor: pointer;
+	}
+
+	.held {
+	  border: solid 10px black;
+	  background-color: black;
+	}
+
+	.holder {
+	  height: 335px;
+	  width: 580px;
+	  margin: 5px;
+	  border: solid 5px black;
+	  background-color: white;
+	  display: block;
+ 	  float: left;
+	}
+
+	.hovered {
+	  border: dotted 5px black;
+	}
+
+	.invisible {
+	  display: none;
+	}
+
+	#container {
+	  margin: auto;
+	  top: 50px;
+	  width: 100%;
+	  position: relative;
+	}
+	.clearfix{
+		clear: both;
+		float: none;
+	}
+  </style>
+</head>
+
+<body>
+<button>Insert</button>
+<div id="container">
+   <div class="holder"></div>
+   <div class="holder"></div>
+   <div class="holder"></div>
+   <div class="holder"></div>
+   <div class="clearfix"></div>
+</div>
+<script>
+class App {
+
+  static init() {
+
+    App.box = document.getElementsByClassName('box')[0]
+
+    App.box.addEventListener("dragstart", App.dragstart)
+    App.box.addEventListener("dragend", App.dragend)
+
+    const containers = document.getElementsByClassName('holder')
+
+    for(const container of containers) {
+      container.addEventListener("dragover", App.dragover)
+      container.addEventListener("dragenter", App.dragenter)
+      container.addEventListener("dragleave", App.dragleave)
+      container.addEventListener("drop", App.drop)
+    }
+  }
+
+  static dragstart() {
+    this.className += " held"
+  
+    setTimeout(()=>this.className="invisible", 0)
+  }
+
+  static dragend() {
+    this.className = "box"
+  }
+
+  static dragover(e) {
+    e.preventDefault()
+  }
+
+  static dragenter(e) {
+    e.preventDefault()
+    this.className += " hovered"
+  }
+
+  static dragleave() {
+    this.className = "holder"
+  }
+
+  static drop() {
+    this.className = "holder"
+    this.append(App.box)
+  }
+
+}
+
+/*document.addEventListener("DOMContentLoaded", App.init);*/
+
+document.querySelector('button').addEventListener('click', function(){
+	var h = document.querySelector('.holder');
+	h.innerHTML = h.innerHTML + '<div class="box" draggable="true"><iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+	App.init();
+});
+
+</script>
+</body>
+
+</html>
